@@ -1,10 +1,11 @@
-<!-- START OF FILE 4kuser_v35_multi_upload.html -->
+
+<!-- START OF FILE 4kuser_fixed_v11.html -->
 <!DOCTYPE html>
 <html lang="my">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AI Studio (Multi-Upload)</title>
+    <title>AI Studio (Fixed Login)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -61,6 +62,19 @@
         .btn-3d-secondary:active {
             transform: translateY(3px);
             box-shadow: 0 0 0 #111827, inset 0 2px 5px rgba(0,0,0,0.5);
+        }
+
+        .btn-3d-danger {
+            background: linear-gradient(to bottom, #991b1b, #7f1d1d);
+            border-top: 1px solid #ef4444;
+            border-bottom: 1px solid #450a0a;
+            box-shadow: 0 3px 0 #450a0a, 0 2px 4px rgba(0,0,0,0.3);
+            transition: all 0.1s;
+            color: white;
+        }
+        .btn-3d-danger:active {
+            transform: translateY(3px);
+            box-shadow: 0 0 0 #450a0a, inset 0 2px 5px rgba(0,0,0,0.5);
         }
 
         .animate-fade-in { animation: fadeIn 0.5s ease-out; }
@@ -147,6 +161,10 @@
                     <div class="relative aspect-card h-full max-h-full border-[6px] border-gray-800 bg-black rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] overflow-hidden flex items-center justify-center ring-1 ring-white/10">
                         <img id="resultImage" class="w-full h-full object-contain">
                     </div>
+                    <!-- Auto Save Toast -->
+                    <div id="autoSaveToast" class="absolute bottom-20 bg-green-900/90 text-white px-4 py-2 rounded-lg text-xs font-bold shadow-lg border border-green-500 flex items-center gap-2 transform translate-y-10 opacity-0 transition-all duration-500 z-50">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> Auto-saved to Cloud!
+                    </div>
                 </div>
                 
                 <!-- Loaders -->
@@ -169,7 +187,7 @@
                     <i class="fa-solid fa-download"></i> Download
                 </button>
                 <button id="saveCloudBtn" class="flex items-center gap-2 text-xs font-bold text-white bg-gradient-to-b from-green-500 to-green-700 border-t border-green-400 border-b border-green-900 shadow-[0_4px_0_#14532d,0_5px_10px_rgba(0,0,0,0.3)] active:translate-y-[4px] active:shadow-none transition-all px-6 py-2.5 rounded-lg">
-                    <i class="fa-solid fa-cloud-arrow-up"></i> Save (Name It)
+                    <i class="fa-solid fa-pen"></i> Rename / Save Again
                 </button>
             </div>
         </main>
@@ -211,19 +229,24 @@
                     </div>
                 </div>
 
-                <!-- Target Input (Multiple) -->
+                <!-- Target Input (WITH LINK BUTTON) -->
                 <div>
                     <div class="flex justify-between items-center mb-2">
                         <h3 class="text-[10px] font-bold text-indigo-400 uppercase tracking-wide drop-shadow"><span class="bg-indigo-900/50 border border-indigo-500/30 w-4 h-4 inline-flex items-center justify-center rounded text-[9px] mr-1">1</span> Target Image</h3>
                     </div>
-                    <div class="grid grid-cols-2 gap-2 mb-2">
-                        <button onclick="document.getElementById('targetInput').click()" class="btn-3d-secondary py-2 rounded text-[10px] text-gray-300 font-bold">
-                            <i class="fa-solid fa-upload mr-1"></i> Upload
+                    <div class="grid grid-cols-3 gap-2 mb-2">
+                        <button onclick="document.getElementById('targetInput').click()" class="btn-3d-secondary py-2 rounded text-[10px] text-gray-300 font-bold flex flex-col items-center justify-center">
+                            <i class="fa-solid fa-upload mb-1"></i> Upload
                         </button>
-                        <!-- Added multiple attribute -->
                         <input type="file" id="targetInput" accept="image/*" multiple class="hidden" onchange="handleDirectUpload('target', this)">
-                        <button onclick="openGallery('target')" id="btnGalleryTarget" class="btn-3d-secondary py-2 rounded text-[10px] text-indigo-300 font-bold">
-                            <i class="fa-solid fa-images mr-1"></i> Gallery
+                        
+                        <button onclick="openGallery('target')" id="btnGalleryTarget" class="btn-3d-secondary py-2 rounded text-[10px] text-indigo-300 font-bold flex flex-col items-center justify-center">
+                            <i class="fa-solid fa-images mb-1"></i> Gallery
+                        </button>
+
+                        <!-- LINK BUTTON (TARGET) -->
+                        <button onclick="importFromUrl('target')" class="btn-3d-danger py-2 rounded text-[10px] font-bold flex flex-col items-center justify-center">
+                            <i class="fa-solid fa-link mb-1"></i> Link
                         </button>
                     </div>
                     <div id="selectedTargetsList" class="grid grid-cols-3 gap-2 min-h-[60px] p-2 bg-black/40 rounded-lg border border-gray-800 shadow-inner">
@@ -231,19 +254,24 @@
                     </div>
                 </div>
 
-                <!-- Face Input (Multiple) -->
+                <!-- Face Input (WITH LINK BUTTON) -->
                 <div id="faceInputContainer">
                     <div class="flex justify-between items-center mb-2">
                         <h3 class="text-[10px] font-bold text-green-400 uppercase tracking-wide drop-shadow"><span class="bg-green-900/50 border border-green-500/30 w-4 h-4 inline-flex items-center justify-center rounded text-[9px] mr-1">2</span> Face Reference</h3>
                     </div>
-                    <div class="grid grid-cols-2 gap-2 mb-2">
-                        <button onclick="document.getElementById('faceInput').click()" class="btn-3d-secondary py-2 rounded text-[10px] text-gray-300 font-bold">
-                            <i class="fa-solid fa-upload mr-1"></i> Upload
+                    <div class="grid grid-cols-3 gap-2 mb-2">
+                        <button onclick="document.getElementById('faceInput').click()" class="btn-3d-secondary py-2 rounded text-[10px] text-gray-300 font-bold flex flex-col items-center justify-center">
+                            <i class="fa-solid fa-upload mb-1"></i> Upload
                         </button>
-                        <!-- Added multiple attribute -->
                         <input type="file" id="faceInput" accept="image/*" multiple class="hidden" onchange="handleDirectUpload('face', this)">
-                        <button onclick="openGallery('face')" id="btnGalleryFace" class="btn-3d-secondary py-2 rounded text-[10px] text-green-300 font-bold">
-                            <i class="fa-solid fa-images mr-1"></i> Gallery
+                        
+                        <button onclick="openGallery('face')" id="btnGalleryFace" class="btn-3d-secondary py-2 rounded text-[10px] text-green-300 font-bold flex flex-col items-center justify-center">
+                            <i class="fa-solid fa-images mb-1"></i> Gallery
+                        </button>
+
+                        <!-- LINK BUTTON (FACE) -->
+                        <button onclick="importFromUrl('face')" class="btn-3d-danger py-2 rounded text-[10px] font-bold flex flex-col items-center justify-center">
+                            <i class="fa-solid fa-link mb-1"></i> Link
                         </button>
                     </div>
                     <div id="selectedFacesList" class="grid grid-cols-3 gap-2 min-h-[60px] p-2 bg-black/40 rounded-lg border border-gray-800 shadow-inner">
@@ -292,6 +320,7 @@
                         <i class="fa-solid fa-folder-tree text-indigo-500 mr-2"></i> Gallery 
                         <span id="galleryTotalDisplay" class="ml-2 text-gray-500 text-xs font-mono"></span>
                     </h3>
+                    <button onclick="importFromUrl()" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center"><i class="fa-brands fa-pinterest mr-1"></i> Import URL</button>
                     <button id="btnGalleryUpload" onclick="document.getElementById('galleryUploadModal').classList.remove('hidden')" class="hidden btn-3d-secondary px-3 py-1.5 rounded text-xs font-bold text-indigo-300"><i class="fa-solid fa-cloud-arrow-up mr-1"></i> Upload</button>
                     <button id="btnManageCats" onclick="openManageCats()" class="hidden btn-3d-secondary px-3 py-1.5 rounded text-xs font-bold text-gray-300"><i class="fa-solid fa-folder-open mr-1"></i> Manage</button>
                 </div>
@@ -436,7 +465,11 @@
             const snap = await getDocs(q);
             if (snap.empty) throw new Error("Invalid Code");
             const d = snap.docs[0]; const data = d.data();
-            if (data.status !== 'active' || data.expiryDate < Date.now()) throw new Error("Code Expired");
+            
+            // FIXED: Only block if status is explicitly NOT active (handles missing status field)
+            const isUnlimited = data.expiryDate === -1 || data.expiryDate === 'unlimited';
+            if (data.status && data.status !== 'active') throw new Error("Code Inactive"); 
+            if (!isUnlimited && data.expiryDate < Date.now()) throw new Error("Code Expired");
             
             const allowedDevices = data.connectedDevices || [];
             const maxDevices = data.maxDevices || 1;
@@ -499,7 +532,6 @@
             checkReady();
         }
 
-        // --- UPDATED MULTIPLE DIRECT UPLOAD ---
         window.handleDirectUpload = async (type, input) => {
             const files = Array.from(input.files); 
             if(files.length === 0) return;
@@ -526,7 +558,7 @@
                 renderSelectedFaces();
             }
             
-            input.value = ''; // Reset input
+            input.value = ''; 
             checkReady();
         };
 
@@ -593,12 +625,20 @@
                     const div = document.createElement('div');
                     div.className = "relative aspect-square rounded-lg overflow-hidden border border-gray-700 group shadow-lg hover:-translate-y-1 transition duration-300";
                     let btns = `
+                        <button onclick="viewImg('${data.url}')" class="bg-black/60 backdrop-blur text-white w-7 h-7 rounded-full flex items-center justify-center hover:bg-white/20 transition" title="View Full"><i class="fa-solid fa-eye text-[10px]"></i></button>
                         <button onclick="downloadImageAction('${data.url}', '${data.name || 'image'}')" class="bg-black/60 backdrop-blur text-white w-7 h-7 rounded-full flex items-center justify-center hover:bg-blue-600 transition" title="Download"><i class="fa-solid fa-download text-[10px]"></i></button>
                         <button onclick="shareImageAction('${data.url}')" class="bg-black/60 backdrop-blur text-white w-7 h-7 rounded-full flex items-center justify-center hover:bg-yellow-600 transition" title="Share"><i class="fa-solid fa-share-nodes text-[10px]"></i></button>
                         <button onclick="copyImgLink('${data.url}')" class="bg-black/60 backdrop-blur text-white w-7 h-7 rounded-full flex items-center justify-center hover:bg-green-600 transition" title="Copy Link"><i class="fa-solid fa-link text-[10px]"></i></button>
                     `;
                     if(permissions.delete) btns += `<button onclick="deleteImg('${data.id}')" class="bg-black/60 backdrop-blur text-white w-7 h-7 rounded-full flex items-center justify-center hover:bg-red-600 transition"><i class="fa-solid fa-trash text-[10px]"></i></button>`;
-                    div.innerHTML = `<img src="${data.url}" class="w-full h-full object-cover cursor-pointer" onclick="viewImg('${data.url}')"><div class="absolute top-1 right-1 flex gap-1 z-20 opacity-0 group-hover:opacity-100 transition">${btns}</div><div class="selection-overlay absolute inset-0 bg-indigo-500/40 hidden flex items-center justify-center pointer-events-none backdrop-blur-[2px] border-4 border-indigo-500"><i class="fa-solid fa-check text-white text-3xl drop-shadow-md"></i></div>`;
+                    
+                    div.innerHTML = `
+                        <img src="${data.url}" class="w-full h-full object-cover cursor-pointer" onclick="selectImg('${data.id}', '${data.url}', this)">
+                        <div class="absolute top-1 right-1 flex gap-1 z-20 opacity-0 group-hover:opacity-100 transition" onclick="event.stopPropagation()">${btns}</div>
+                        <div class="selection-overlay absolute inset-0 bg-indigo-500/40 hidden flex items-center justify-center pointer-events-none backdrop-blur-[2px] border-4 border-indigo-500">
+                            <i class="fa-solid fa-check text-white text-3xl drop-shadow-md"></i>
+                        </div>
+                    `;
                     grid.appendChild(div);
                 });
 
@@ -611,10 +651,17 @@
         };
 
         window.selectImg = (id, url, imgEl) => {
-            const overlay = imgEl.parentElement.querySelector('.selection-overlay');
+            const parent = imgEl.parentElement;
+            const overlay = parent.querySelector('.selection-overlay');
+            
             const idx = tempSelected.findIndex(i => i.id === id);
-            if(idx > -1) { tempSelected.splice(idx, 1); overlay.classList.add('hidden'); }
-            else { tempSelected.push({id, url}); overlay.classList.remove('hidden'); }
+            if(idx > -1) { 
+                tempSelected.splice(idx, 1); 
+                overlay.classList.add('hidden'); 
+            } else { 
+                tempSelected.push({id, url}); 
+                overlay.classList.remove('hidden'); 
+            }
             document.getElementById('confirmSelectionBtn').innerText = `Select (${tempSelected.length})`;
         };
 
@@ -675,7 +722,6 @@
             window.closeGallery();
         });
 
-        // --- UPDATED MULTIPLE GALLERY UPLOAD ---
         window.uploadToGalleryAction = async () => {
             const files = document.getElementById('galUploadFile').files; 
             const cat = document.getElementById('galUploadCat').value; 
@@ -715,11 +761,9 @@
                                 });
                                 resolve(true);
                             } else {
-                                console.error("ImgBB Error:", json.error.message);
-                                resolve(false); // resolve false to not break the loop
+                                resolve(false);
                             }
                         } catch(err) {
-                            console.error("Upload Error:", err);
                             resolve(false);
                         }
                     };
@@ -727,7 +771,6 @@
                 });
             };
 
-            // Process sequentially to update UI
             for (let i = 0; i < total; i++) {
                 document.getElementById('globalLoaderText').innerText = `UPLOADING ${i+1}/${total}...`;
                 const result = await processFile(files[i]);
@@ -735,7 +778,7 @@
             }
 
             document.getElementById('globalLoader').classList.add('hidden'); 
-            document.getElementById('globalLoaderText').innerText = "UPLOADING TO CLOUD..."; // Reset text
+            document.getElementById('globalLoaderText').innerText = "UPLOADING TO CLOUD..."; 
             
             categories.add(cat); 
             filterGallery(cat); 
@@ -744,6 +787,164 @@
             else alert("Upload failed. Please check your connection or image sizes.");
         };
 
+        // --- PINTEREST IMPORT ---
+        window.importFromUrl = async (type = 'target') => {
+            const url = prompt("Paste Image Link (Direct Link Only):\nTip: Right-click image > Copy Image Address");
+            if(!url) return;
+            
+            if(!adminConfig.imgbbKey) return alert("System Error: Admin API Key Missing");
+            
+            // Auto categorize as 'Pinterest' if adding to target
+            const cat = "Pinterest";
+            
+            document.getElementById('globalLoader').classList.remove('hidden');
+            document.getElementById('globalLoaderText').innerText = "IMPORTING FROM URL...";
+
+            const formData = new FormData();
+            formData.append("image", url); 
+
+            try {
+                const res = await fetch(`https://api.imgbb.com/1/upload?key=${adminConfig.imgbbKey}`, { method: 'POST', body: formData });
+                const json = await res.json();
+                
+                if(json.success) {
+                    const newUrl = json.data.url;
+                    
+                    // Add to Firestore
+                    await addDoc(collection(db, `user_data/${activeAccessCode}/targets`), { 
+                        url: newUrl, 
+                        category: cat, 
+                        type: 'target', 
+                        name: "Import_" + Date.now(), 
+                        createdAt: Date.now() 
+                    });
+
+                    // Add to Input Preview Immediately
+                    const newItem = { id: 'temp_' + Date.now(), url: newUrl };
+                    if(type === 'target') {
+                        selectedTargets.push(newItem);
+                        renderSelectedTargets();
+                    } else {
+                        // Just in case we enable it for faces later
+                        selectedFaces.push(newItem);
+                        renderSelectedFaces();
+                    }
+
+                    document.getElementById('globalLoader').classList.add('hidden');
+                    categories.add(cat); 
+                    // No need to alert, just show it
+                } else {
+                    throw new Error(json.error.message);
+                }
+            } catch(e) {
+                document.getElementById('globalLoader').classList.add('hidden');
+                alert("Import Failed: " + e.message + "\nMake sure it's a direct image link.");
+            }
+        };
+
+        document.getElementById('generateBtn').addEventListener('click', async () => {
+            if ((userQuota.used + currentCost) > userQuota.limit) return alert(`Not enough credits!`);
+            if(!adminConfig.apiKey) return alert("System not ready.");
+            const loader = document.getElementById('loader'); loader.classList.remove('hidden'); 
+            const parts = [{ text: document.getElementById('promptInput').value + (currentQuality!=='1k' ? ', high quality' : '') }];
+            
+            const getBase64 = (url) => {
+                return new Promise((resolve, reject) => {
+                    if(url.startsWith('data:')) return resolve(url.split(',')[1]);
+                    const img = new Image(); img.crossOrigin = 'Anonymous'; img.src = url;
+                    img.onload = () => { const canvas = document.createElement('canvas'); canvas.width = img.width; canvas.height = img.height; const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0); resolve(canvas.toDataURL('image/jpeg', 0.9).split(',')[1]); };
+                    img.onerror = () => { console.error("Image load failed (CORS likely): " + url); reject(new Error("Cannot process image. Try re-uploading directly.")); };
+                });
+            };
+
+            try {
+                const tB64s = await Promise.all(selectedTargets.map(t => getBase64(t.url)));
+                const fB64s = (permissions.face_input !== false) ? await Promise.all(selectedFaces.map(f => getBase64(f.url))) : [];
+                [...tB64s, ...fB64s].forEach(d => parts.push({ inlineData: { mimeType: "image/jpeg", data: d } }));
+                
+                let modelId = adminConfig.model ? adminConfig.model.replace('models/', '') : 'gemini-1.5-flash';
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelId}:generateContent?key=${adminConfig.apiKey}`, { 
+                    method: 'POST', headers: {'Content-Type': 'application/json'}, 
+                    body: JSON.stringify({ contents: [{ parts: parts }], safetySettings: [{ category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" }, { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" }, { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" }, { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" }]}) 
+                });
+                
+                const json = await res.json();
+                if(json.error) throw new Error(json.error.message);
+                const img = json.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
+                if(img) {
+                    currentResultBase64 = `data:image/png;base64,${img}`;
+                    if(activeDocId) {
+                        const updateData = { imagesGenerated: (userQuota.used + currentCost) };
+                        if(currentQuality==='1k') updateData.imagesGenerated1k = (userQuota.generated['1k']||0)+1;
+                        if(currentQuality==='2k') updateData.imagesGenerated2k = (userQuota.generated['2k']||0)+1;
+                        if(currentQuality==='4k') updateData.imagesGenerated4k = (userQuota.generated['4k']||0)+1;
+                        await updateDoc(doc(db, "access_codes", activeDocId), updateData);
+                    }
+                    document.getElementById('resultImage').src = currentResultBase64;
+                    hasGenerated = true; 
+                    window.switchView('result');
+
+                    if(adminConfig.imgbbKey) {
+                        const formData = new FormData(); 
+                        formData.append("image", img);
+                        fetch(`https://api.imgbb.com/1/upload?key=${adminConfig.imgbbKey}`, { method: 'POST', body: formData })
+                        .then(r => r.json())
+                        .then(async (json) => {
+                            if(json.success) {
+                                await addDoc(collection(db, `user_data/${activeAccessCode}/targets`), { 
+                                    url: json.data.url, 
+                                    category: "ပြင်ပြီးပုံများ", 
+                                    type: "result", 
+                                    name: "Auto_Gen_" + Date.now(), 
+                                    createdAt: Date.now() 
+                                });
+                                const toast = document.getElementById('autoSaveToast');
+                                toast.classList.remove('translate-y-10', 'opacity-0');
+                                setTimeout(() => toast.classList.add('translate-y-10', 'opacity-0'), 3000);
+                            }
+                        }).catch(err => console.error("Auto-save failed", err));
+                    }
+
+                } else throw new Error("Blocked by AI Safety or No Image Generated.");
+            } catch(e) { alert("Generate Error: " + e.message); } finally { loader.classList.add('hidden'); }
+        });
+
+        document.getElementById('saveCloudBtn').addEventListener('click', async () => {
+            if(!currentResultBase64) return alert("No result");
+            const userFileName = prompt("Enter a name for this image:", "My_AI_Image");
+            if(userFileName === null) return;
+            const finalName = userFileName.trim() || "Untitled_AI";
+
+            if(!adminConfig.imgbbKey) return alert("System Error: Admin API Key Missing");
+            document.getElementById('globalLoader').classList.remove('hidden'); 
+            const formData = new FormData(); formData.append("image", currentResultBase64.replace(/^data:image\/(png|jpg|jpeg);base64,/, ""));
+            try {
+                const res = await fetch(`https://api.imgbb.com/1/upload?key=${adminConfig.imgbbKey}`, { method: 'POST', body: formData });
+                const json = await res.json();
+                if(json.success) {
+                    const finalUrl = json.data.url;
+                    await addDoc(collection(db, `user_data/${activeAccessCode}/targets`), { url: finalUrl, category: "ပြင်ပြီးပုံများ", type: "result", name: finalName, createdAt: Date.now() });
+                    document.getElementById('globalLoader').classList.add('hidden');
+                    categories.add("ပြင်ပြီးပုံများ"); window.openGallery('target'); window.filterGallery("ပြင်ပြီးပုံများ"); alert(`Saved to Cloud as "${finalName}"!`); 
+                } else { throw new Error(json.error.message); }
+            } catch(e) { document.getElementById('globalLoader').classList.add('hidden'); alert("Save Error: " + e.message); }
+        });
+
+        document.getElementById('btnSavePrompt').addEventListener('click', async () => { const txt = document.getElementById('promptInput').value.trim(); if(!txt) return; await addDoc(collection(db, `user_data/${activeAccessCode}/prompts`), { text: txt, createdAt: Date.now() }); alert("Saved"); });
+        document.getElementById('btnHistoryPrompt').addEventListener('click', async () => {
+            document.getElementById('historyModal').classList.remove('hidden'); const list = document.getElementById('promptHistoryList'); list.innerHTML = '<p class="text-center text-gray-500 py-4">Loading...</p>';
+            const snap = await getDocs(query(collection(db, `user_data/${activeAccessCode}/prompts`), orderBy('createdAt', 'desc')));
+            list.innerHTML = ''; 
+            snap.forEach(d => {
+                list.innerHTML += `<div class="bg-black/30 p-4 rounded-lg text-sm text-gray-200 hover:bg-white/5 cursor-pointer flex justify-between gap-4 items-center mb-2 border border-white/5 shadow-sm prompt-item" data-text="${d.data().text}"><span class="truncate flex-1 font-mono">${d.data().text}</span><button class="del-pmt text-red-400 hover:text-red-300 p-2 rounded-lg hover:bg-red-900/30 transition" data-id="${d.id}"><i class="fa-solid fa-trash"></i></button></div>`;
+            });
+            list.onclick = (e) => {
+                const delBtn = e.target.closest('.del-pmt');
+                const item = e.target.closest('.prompt-item');
+                if(delBtn) { e.stopPropagation(); deletePrompt(delBtn.dataset.id); } else if(item) { document.getElementById('promptInput').value = item.dataset.text; document.getElementById('historyModal').classList.add('hidden'); }
+            };
+        });
+        window.deletePrompt = async (id) => { if (confirm("Delete?")) { await deleteDoc(doc(db, `user_data/${activeAccessCode}/prompts`, id)); document.getElementById('btnHistoryPrompt').click(); } }
         window.renameCat = async (oldName) => {
             const newName = prompt("Rename to:"); if(!newName) return;
             const batch = writeBatch(db); const snaps = await getDocs(query(collection(db, `user_data/${activeAccessCode}/targets`), where('category', '==', oldName)));
@@ -790,87 +991,6 @@
                 btn.innerText = "WAITING FOR IMAGES..."; 
             }
         }
-
-        document.getElementById('generateBtn').addEventListener('click', async () => {
-            if ((userQuota.used + currentCost) > userQuota.limit) return alert(`Not enough credits!`);
-            if(!adminConfig.apiKey) return alert("System not ready.");
-            const loader = document.getElementById('loader'); loader.classList.remove('hidden'); 
-            const parts = [{ text: document.getElementById('promptInput').value + (currentQuality!=='1k' ? ', high quality' : '') }];
-            
-            const getBase64 = (url) => {
-                return new Promise((resolve, reject) => {
-                    if(url.startsWith('data:')) return resolve(url.split(',')[1]);
-                    const img = new Image(); img.crossOrigin = 'Anonymous'; img.src = url;
-                    img.onload = () => { const canvas = document.createElement('canvas'); canvas.width = img.width; canvas.height = img.height; const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0); resolve(canvas.toDataURL('image/jpeg', 0.9).split(',')[1]); };
-                    img.onerror = () => { console.error("Image load failed (CORS likely): " + url); reject(new Error("Cannot process image. Try re-uploading directly.")); };
-                });
-            };
-
-            try {
-                const tB64s = await Promise.all(selectedTargets.map(t => getBase64(t.url)));
-                const fB64s = (permissions.face_input !== false) ? await Promise.all(selectedFaces.map(f => getBase64(f.url))) : [];
-                [...tB64s, ...fB64s].forEach(d => parts.push({ inlineData: { mimeType: "image/jpeg", data: d } }));
-                
-                let modelId = adminConfig.model ? adminConfig.model.replace('models/', '') : 'gemini-1.5-flash';
-                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelId}:generateContent?key=${adminConfig.apiKey}`, { 
-                    method: 'POST', headers: {'Content-Type': 'application/json'}, 
-                    body: JSON.stringify({ contents: [{ parts: parts }], safetySettings: [{ category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" }, { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" }, { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" }, { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" }]}) 
-                });
-                
-                const json = await res.json();
-                if(json.error) throw new Error(json.error.message);
-                const img = json.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
-                if(img) {
-                    currentResultBase64 = `data:image/png;base64,${img}`;
-                    if(activeDocId) {
-                        const updateData = { imagesGenerated: (userQuota.used + currentCost) };
-                        if(currentQuality==='1k') updateData.imagesGenerated1k = (userQuota.generated['1k']||0)+1;
-                        if(currentQuality==='2k') updateData.imagesGenerated2k = (userQuota.generated['2k']||0)+1;
-                        if(currentQuality==='4k') updateData.imagesGenerated4k = (userQuota.generated['4k']||0)+1;
-                        await updateDoc(doc(db, "access_codes", activeDocId), updateData);
-                    }
-                    document.getElementById('resultImage').src = currentResultBase64;
-                    hasGenerated = true; window.switchView('result');
-                } else throw new Error("Blocked by AI Safety or No Image Generated.");
-            } catch(e) { alert("Generate Error: " + e.message); } finally { loader.classList.add('hidden'); }
-        });
-
-        document.getElementById('saveCloudBtn').addEventListener('click', async () => {
-            if(!currentResultBase64) return alert("No result");
-            const userFileName = prompt("Enter a name for this image:", "My_AI_Image");
-            if(userFileName === null) return;
-            const finalName = userFileName.trim() || "Untitled_AI";
-
-            if(!adminConfig.imgbbKey) return alert("System Error: Admin API Key Missing");
-            document.getElementById('globalLoader').classList.remove('hidden'); 
-            const formData = new FormData(); formData.append("image", currentResultBase64.replace(/^data:image\/(png|jpg|jpeg);base64,/, ""));
-            try {
-                const res = await fetch(`https://api.imgbb.com/1/upload?key=${adminConfig.imgbbKey}`, { method: 'POST', body: formData });
-                const json = await res.json();
-                if(json.success) {
-                    const finalUrl = json.data.url;
-                    await addDoc(collection(db, `user_data/${activeAccessCode}/targets`), { url: finalUrl, category: "ပြင်ပြီးပုံများ", type: "result", name: finalName, createdAt: Date.now() });
-                    document.getElementById('globalLoader').classList.add('hidden');
-                    categories.add("ပြင်ပြီးပုံများ"); window.openGallery('target'); window.filterGallery("ပြင်ပြီးပုံများ"); alert(`Saved to Cloud as "${finalName}"!`); 
-                } else { throw new Error(json.error.message); }
-            } catch(e) { document.getElementById('globalLoader').classList.add('hidden'); alert("Save Error: " + e.message); }
-        });
-
-        document.getElementById('btnSavePrompt').addEventListener('click', async () => { const txt = document.getElementById('promptInput').value.trim(); if(!txt) return; await addDoc(collection(db, `user_data/${activeAccessCode}/prompts`), { text: txt, createdAt: Date.now() }); alert("Saved"); });
-        document.getElementById('btnHistoryPrompt').addEventListener('click', async () => {
-            document.getElementById('historyModal').classList.remove('hidden'); const list = document.getElementById('promptHistoryList'); list.innerHTML = '<p class="text-center text-gray-500 py-4">Loading...</p>';
-            const snap = await getDocs(query(collection(db, `user_data/${activeAccessCode}/prompts`), orderBy('createdAt', 'desc')));
-            list.innerHTML = ''; 
-            snap.forEach(d => {
-                list.innerHTML += `<div class="bg-black/30 p-4 rounded-lg text-sm text-gray-200 hover:bg-white/5 cursor-pointer flex justify-between gap-4 items-center mb-2 border border-white/5 shadow-sm prompt-item" data-text="${d.data().text}"><span class="truncate flex-1 font-mono">${d.data().text}</span><button class="del-pmt text-red-400 hover:text-red-300 p-2 rounded-lg hover:bg-red-900/30 transition" data-id="${d.id}"><i class="fa-solid fa-trash"></i></button></div>`;
-            });
-            list.onclick = (e) => {
-                const delBtn = e.target.closest('.del-pmt');
-                const item = e.target.closest('.prompt-item');
-                if(delBtn) { e.stopPropagation(); deletePrompt(delBtn.dataset.id); } else if(item) { document.getElementById('promptInput').value = item.dataset.text; document.getElementById('historyModal').classList.add('hidden'); }
-            };
-        });
-        window.deletePrompt = async (id) => { if (confirm("Delete?")) { await deleteDoc(doc(db, `user_data/${activeAccessCode}/prompts`, id)); document.getElementById('btnHistoryPrompt').click(); } }
 
         initApp();
     </script>
