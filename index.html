@@ -1,18 +1,26 @@
-
-<!-- START OF FILE 4kuser_fixed_v11.html -->
+<!-- START OF FILE index.html -->
 <!DOCTYPE html>
 <html lang="my">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AI Studio (Fixed Login)</title>
+    <title>AI Studio (Pro Max)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        /* --- THEME VARIABLES --- */
+        :root {
+            --primary-h: 243; /* Indigo Default */
+            --primary-s: 75%;
+            --primary-l: 59%;
+            --theme-color: hsl(var(--primary-h), var(--primary-s), var(--primary-l));
+            --theme-glow: hsla(var(--primary-h), var(--primary-s), var(--primary-l), 0.5);
+        }
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, #4f46e5, #3730a3); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, var(--theme-color), #3730a3); border-radius: 4px; }
         
         /* Background Grid */
         .canvas-bg { 
@@ -32,16 +40,23 @@
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
         }
 
+        /* Theme-based Text & Borders */
+        .text-theme { color: var(--theme-color); }
+        .border-theme { border-color: var(--theme-color); }
+        .bg-theme { background-color: var(--theme-color); }
+        .group:hover .group-hover\:text-theme { color: var(--theme-color); }
+
         .btn-3d-primary {
-            background: linear-gradient(to bottom, #6366f1, #4338ca);
-            border-top: 1px solid #818cf8;
-            border-bottom: 1px solid #312e81;
-            box-shadow: 0 4px 0 #312e81, 0 5px 10px rgba(0,0,0,0.5);
+            background: linear-gradient(to bottom, hsl(var(--primary-h), var(--primary-s), 60%), hsl(var(--primary-h), var(--primary-s), 40%));
+            border-top: 1px solid hsl(var(--primary-h), var(--primary-s), 70%);
+            border-bottom: 1px solid hsl(var(--primary-h), var(--primary-s), 20%);
+            box-shadow: 0 4px 0 hsl(var(--primary-h), var(--primary-s), 20%), 0 5px 10px rgba(0,0,0,0.5);
             transition: all 0.1s;
+            color: white;
         }
         .btn-3d-primary:active {
             transform: translateY(4px);
-            box-shadow: 0 0 0 #312e81, inset 0 2px 5px rgba(0,0,0,0.3);
+            box-shadow: 0 0 0 hsl(var(--primary-h), var(--primary-s), 20%), inset 0 2px 5px rgba(0,0,0,0.3);
         }
         .btn-3d-primary:disabled {
             background: #1f2937;
@@ -82,7 +97,18 @@
         .aspect-card { aspect-ratio: 10/14; }
         
         .logo-glow { animation: pulseGlow 3s infinite alternate; }
-        @keyframes pulseGlow { from { filter: drop-shadow(0 0 5px rgba(99,102,241,0.3)); } to { filter: drop-shadow(0 0 15px rgba(99,102,241,0.6)); } }
+        @keyframes pulseGlow { from { filter: drop-shadow(0 0 5px rgba(255,255,255,0.1)); } to { filter: drop-shadow(0 0 15px var(--theme-glow)); } }
+
+        /* Color Picker Circles */
+        .color-dot {
+            width: 24px; height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: transform 0.2s;
+        }
+        .color-dot:hover { transform: scale(1.2); }
+        .color-dot.active { border-color: white; box-shadow: 0 0 10px var(--theme-glow); transform: scale(1.1); }
     </style>
 </head>
 <body class="bg-gray-950 text-gray-200 min-h-screen font-sans overflow-hidden">
@@ -90,11 +116,11 @@
     <!-- Auth -->
     <div id="authScreen" class="fixed inset-0 z-[300] flex flex-col items-center justify-center bg-gray-950 p-4 canvas-bg">
         <div class="glass-panel p-8 rounded-2xl w-full max-w-sm text-center relative overflow-hidden">
-            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1 bg-indigo-500 blur-[20px]"></div>
-            <h1 class="text-3xl font-black text-white mb-8 tracking-wider drop-shadow-lg" style="text-shadow: 0 2px 10px rgba(99, 102, 241, 0.5);">AI STUDIO <span class="text-indigo-400 text-sm align-top">PRO</span></h1>
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1 bg-theme blur-[20px]"></div>
+            <h1 class="text-3xl font-black text-white mb-8 tracking-wider drop-shadow-lg" style="text-shadow: 0 2px 10px rgba(0,0,0, 0.5);">AI STUDIO <span class="text-theme text-sm align-top">PRO</span></h1>
             
             <div class="relative mb-6">
-                <input type="text" id="accessCode" placeholder="ENTER CODE" class="w-full bg-gray-900/50 p-4 rounded-xl text-white text-center font-mono text-xl uppercase tracking-widest outline-none border border-gray-700 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] transition-all">
+                <input type="text" id="accessCode" placeholder="ENTER CODE" class="w-full bg-gray-900/50 p-4 rounded-xl text-white text-center font-mono text-xl uppercase tracking-widest outline-none border border-gray-700 focus:border-theme focus:ring-1 focus:ring-theme shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] transition-all">
                 <i class="fa-solid fa-key absolute left-4 top-1/2 -translate-y-1/2 text-gray-600"></i>
             </div>
             
@@ -119,7 +145,7 @@
                 </div>
                 <div class="flex items-center gap-3">
                     <div class="text-right hidden md:block">
-                        <p id="displayCode" class="font-mono text-indigo-400 text-xs font-bold drop-shadow">USER</p>
+                        <p id="displayCode" class="font-mono text-theme text-xs font-bold drop-shadow">USER</p>
                         <p id="quotaDisplay" class="text-[10px] text-yellow-500 font-bold drop-shadow">Credits: ...</p>
                     </div>
                     <button id="menuToggleBtn" class="md:hidden btn-3d-secondary px-3 py-2 rounded-lg text-white z-50"><i class="fa-solid fa-bars"></i></button>
@@ -150,8 +176,8 @@
                     </div>
                     <div class="md:hidden text-gray-500"><i class="fa-solid fa-arrow-down"></i></div>
                     <div class="hidden md:block text-gray-500"><i class="fa-solid fa-arrow-right"></i></div>
-                    <div class="flex-1 w-full h-full max-h-[45vh] md:max-h-full relative border-[4px] border-indigo-900/50 bg-black rounded-xl overflow-hidden shadow-2xl group">
-                        <span class="absolute top-3 left-3 bg-indigo-600 text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg z-20">RESULT</span>
+                    <div class="flex-1 w-full h-full max-h-[45vh] md:max-h-full relative border-[4px] border-theme bg-black rounded-xl overflow-hidden shadow-2xl group">
+                        <span class="absolute top-3 left-3 bg-theme text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg z-20">RESULT</span>
                         <img id="compareResultImg" class="w-full h-full object-contain">
                     </div>
                 </div>
@@ -171,18 +197,23 @@
                 <div id="loader" class="hidden absolute inset-0 bg-black/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center">
                     <div class="relative w-16 h-16">
                         <div class="absolute inset-0 border-4 border-gray-700 rounded-full"></div>
-                        <div class="absolute inset-0 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+                        <div class="absolute inset-0 border-4 border-theme border-t-transparent rounded-full animate-spin"></div>
                     </div>
-                    <p id="loaderText" class="text-indigo-400 text-xs font-bold mt-4 animate-pulse tracking-widest">PROCESSING AI...</p>
+                    <p id="loaderText" class="text-theme text-xs font-bold mt-4 animate-pulse tracking-widest">PROCESSING AI...</p>
                 </div>
                 <div id="globalLoader" class="hidden absolute inset-0 bg-black/90 backdrop-blur z-[500] flex flex-col items-center justify-center">
-                    <i class="fa-solid fa-cloud-arrow-up text-5xl text-indigo-500 animate-bounce mb-4 drop-shadow-[0_0_15px_rgba(99,102,241,0.5)]"></i>
+                    <i class="fa-solid fa-cloud-arrow-up text-5xl text-theme animate-bounce mb-4 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]"></i>
                     <p id="globalLoaderText" class="text-white text-xs font-bold tracking-widest">UPLOADING TO CLOUD...</p>
                 </div>
             </div>
 
             <!-- Bottom Bar (Actions) -->
             <div id="bottomBar" class="h-16 bg-gray-900/90 backdrop-blur border-t border-gray-800 justify-center items-center gap-4 shrink-0 hidden z-40 shadow-[0_-5px_15px_rgba(0,0,0,0.3)]">
+                <!-- PRINT BUTTON IN RESULT VIEW -->
+                <button onclick="printImageAction(currentResultBase64)" class="btn-3d-secondary flex items-center gap-2 text-xs font-bold text-gray-300 px-4 py-2.5 rounded-lg">
+                    <i class="fa-solid fa-print"></i> Print
+                </button>
+
                 <button onclick="downloadResultImage()" class="btn-3d-secondary flex items-center gap-2 text-xs font-bold text-gray-300 px-4 py-2.5 rounded-lg">
                     <i class="fa-solid fa-download"></i> Download
                 </button>
@@ -196,22 +227,34 @@
         <aside id="mainSidebar" class="fixed inset-y-0 right-0 z-[100] w-80 bg-gradient-to-b from-gray-900 to-gray-950 border-l border-white/5 flex flex-col transform translate-x-full md:translate-x-0 md:relative md:w-[320px] shadow-2xl transition-transform duration-300">
             <div class="p-4 border-b border-white/5 flex justify-between items-center bg-gray-900/50">
                 <h2 class="font-bold text-gray-300 text-xs tracking-widest uppercase flex items-center gap-2">
-                    <i class="fa-solid fa-sliders text-indigo-500"></i> Controls
+                    <i class="fa-solid fa-sliders text-theme"></i> Controls
                 </h2>
                 <button id="closeSidebarBtn" class="md:hidden text-gray-400 hover:text-white"><i class="fa-solid fa-times text-xl"></i></button>
             </div>
             
             <div class="flex-1 overflow-y-auto p-4 space-y-6">
+                <!-- Theme Color Picker -->
+                <div class="glass-panel p-3 rounded-xl">
+                    <div class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Theme Color</div>
+                    <div class="flex justify-between px-2">
+                        <div class="color-dot bg-indigo-500" onclick="changeTheme('indigo', 243)" title="Blue"></div>
+                        <div class="color-dot bg-purple-500" onclick="changeTheme('purple', 270)" title="Purple"></div>
+                        <div class="color-dot bg-emerald-500" onclick="changeTheme('emerald', 160)" title="Green"></div>
+                        <div class="color-dot bg-amber-500" onclick="changeTheme('amber', 40)" title="Gold"></div>
+                        <div class="color-dot bg-rose-500" onclick="changeTheme('rose', 340)" title="Red"></div>
+                    </div>
+                </div>
+
                 <!-- Stats Panel -->
                 <div class="glass-panel p-3 rounded-xl space-y-2 relative overflow-hidden group">
-                    <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent pointer-events-none"></div>
+                    <div class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none"></div>
                     <div class="flex justify-between items-center pb-2 border-b border-gray-700">
                         <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider flex items-center"><i class="fa-solid fa-coins text-yellow-500 mr-1.5 drop-shadow"></i>Credit Balance</span>
                         <span id="sidebarCreditDisplay" class="text-xs font-mono font-bold text-white drop-shadow">Loading...</span>
                     </div>
                     <div class="flex justify-between items-center">
                         <span class="text-[10px] font-bold text-gray-500 uppercase">Total Generated:</span>
-                        <span id="statTotalGenerated" class="text-xs font-mono font-bold text-indigo-400">0</span>
+                        <span id="statTotalGenerated" class="text-xs font-mono font-bold text-theme">0</span>
                     </div>
                     <div class="grid grid-cols-3 gap-2 text-center pt-2">
                         <div class="bg-black/40 rounded p-1 border border-white/5 shadow-inner">
@@ -232,7 +275,7 @@
                 <!-- Target Input (WITH LINK BUTTON) -->
                 <div>
                     <div class="flex justify-between items-center mb-2">
-                        <h3 class="text-[10px] font-bold text-indigo-400 uppercase tracking-wide drop-shadow"><span class="bg-indigo-900/50 border border-indigo-500/30 w-4 h-4 inline-flex items-center justify-center rounded text-[9px] mr-1">1</span> Target Image</h3>
+                        <h3 class="text-[10px] font-bold text-theme uppercase tracking-wide drop-shadow"><span class="bg-gray-800 border border-theme w-4 h-4 inline-flex items-center justify-center rounded text-[9px] mr-1">1</span> Target Image</h3>
                     </div>
                     <div class="grid grid-cols-3 gap-2 mb-2">
                         <button onclick="document.getElementById('targetInput').click()" class="btn-3d-secondary py-2 rounded text-[10px] text-gray-300 font-bold flex flex-col items-center justify-center">
@@ -240,7 +283,7 @@
                         </button>
                         <input type="file" id="targetInput" accept="image/*" multiple class="hidden" onchange="handleDirectUpload('target', this)">
                         
-                        <button onclick="openGallery('target')" id="btnGalleryTarget" class="btn-3d-secondary py-2 rounded text-[10px] text-indigo-300 font-bold flex flex-col items-center justify-center">
+                        <button onclick="openGallery('target')" id="btnGalleryTarget" class="btn-3d-secondary py-2 rounded text-[10px] text-theme font-bold flex flex-col items-center justify-center">
                             <i class="fa-solid fa-images mb-1"></i> Gallery
                         </button>
 
@@ -288,7 +331,7 @@
                             <button id="btnHistoryPrompt" class="btn-3d-secondary text-[9px] px-2 py-1 rounded text-gray-300" title="History"><i class="fa-solid fa-history"></i></button>
                         </div>
                     </div>
-                    <textarea id="promptInput" rows="3" class="w-full bg-black/40 border border-gray-700 rounded-lg p-3 text-xs text-gray-200 outline-none focus:border-indigo-500 focus:bg-gray-900 transition shadow-inner resize-none" placeholder="Enter specific instructions..."></textarea>
+                    <textarea id="promptInput" rows="3" class="w-full bg-black/40 border border-gray-700 rounded-lg p-3 text-xs text-gray-200 outline-none focus:border-theme focus:bg-gray-900 transition shadow-inner resize-none" placeholder="Enter specific instructions..."></textarea>
                 </div>
             </div>
             
@@ -306,6 +349,14 @@
                 </div>
                 
                 <button id="generateBtn" disabled class="w-full btn-3d-primary py-4 rounded-xl font-bold text-xs tracking-[2px] uppercase disabled:opacity-50 disabled:cursor-not-allowed">Waiting...</button>
+                
+                <!-- BACKUP / RESTORE BUTTONS -->
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="backupUserData()" class="btn-3d-secondary py-2 rounded text-[10px] text-blue-300 font-bold border-b border-blue-900"><i class="fa-solid fa-download mr-1"></i> Data Backup</button>
+                    <button onclick="document.getElementById('restoreInput').click()" class="btn-3d-secondary py-2 rounded text-[10px] text-green-300 font-bold border-b border-green-900"><i class="fa-solid fa-upload mr-1"></i> Restore</button>
+                    <input type="file" id="restoreInput" accept=".json" class="hidden" onchange="restoreUserData(this)">
+                </div>
+
                 <button id="logoutBtn" class="w-full py-2 text-[10px] text-red-500/70 hover:text-red-400 transition font-bold uppercase tracking-wider">Disconnect Device</button>
             </div>
         </aside>
@@ -317,11 +368,11 @@
             <div class="p-4 border-b border-white/10 flex justify-between items-center bg-gray-900/50">
                 <div class="flex items-center gap-3">
                     <h3 class="text-white font-bold text-sm flex items-center shadow-black drop-shadow-md">
-                        <i class="fa-solid fa-folder-tree text-indigo-500 mr-2"></i> Gallery 
+                        <i class="fa-solid fa-folder-tree text-theme mr-2"></i> Gallery 
                         <span id="galleryTotalDisplay" class="ml-2 text-gray-500 text-xs font-mono"></span>
                     </h3>
                     <button onclick="importFromUrl()" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center"><i class="fa-brands fa-pinterest mr-1"></i> Import URL</button>
-                    <button id="btnGalleryUpload" onclick="document.getElementById('galleryUploadModal').classList.remove('hidden')" class="hidden btn-3d-secondary px-3 py-1.5 rounded text-xs font-bold text-indigo-300"><i class="fa-solid fa-cloud-arrow-up mr-1"></i> Upload</button>
+                    <button id="btnGalleryUpload" onclick="document.getElementById('galleryUploadModal').classList.remove('hidden')" class="hidden btn-3d-secondary px-3 py-1.5 rounded text-xs font-bold text-theme"><i class="fa-solid fa-cloud-arrow-up mr-1"></i> Upload</button>
                     <button id="btnManageCats" onclick="openManageCats()" class="hidden btn-3d-secondary px-3 py-1.5 rounded text-xs font-bold text-gray-300"><i class="fa-solid fa-folder-open mr-1"></i> Manage</button>
                 </div>
                 <div class="flex gap-2">
@@ -359,14 +410,31 @@
     
     <div id="announcementModal" class="hidden fixed inset-0 z-[230] bg-black/95 backdrop-blur flex items-center justify-center p-4"><div class="glass-panel rounded-xl w-full max-w-sm overflow-hidden shadow-[0_0_30px_rgba(99,102,241,0.3)]"><img id="annImg" class="w-full h-40 object-cover"><div class="p-6"><h3 class="font-bold text-white mb-2 text-lg">Announcement</h3><p id="annText" class="text-gray-300 text-sm mb-6 leading-relaxed"></p><button onclick="document.getElementById('announcementModal').classList.add('hidden')" class="w-full btn-3d-primary py-2 rounded text-white font-bold">Close</button></div></div></div>
     
-    <div id="lightboxModal" class="hidden fixed inset-0 z-[250] bg-black/95 backdrop-blur flex items-center justify-center p-4"><img id="lightboxImg" class="max-w-full max-h-full object-contain rounded-lg shadow-[0_0_50px_rgba(0,0,0,0.8)] border border-gray-800"><button onclick="document.getElementById('lightboxModal').classList.add('hidden')" class="absolute top-4 right-4 text-white text-3xl drop-shadow-lg hover:scale-110 transition"><i class="fa-solid fa-times"></i></button></div>
+    <!-- LIGHTBOX WITH ZOOM CAPABILITY -->
+    <div id="lightboxModal" class="hidden fixed inset-0 z-[250] bg-black/95 backdrop-blur flex items-center justify-center overflow-hidden touch-none">
+        <div id="zoomContainer" class="w-full h-full flex items-center justify-center transform-gpu">
+            <img id="lightboxImg" class="max-w-full max-h-full object-contain transition-transform duration-75 ease-linear">
+        </div>
+        
+        <!-- Controls -->
+        <div class="absolute bottom-10 left-0 right-0 flex justify-center gap-4 pointer-events-none">
+            <!-- PRINT BUTTON IN LIGHTBOX -->
+            <button onclick="printImageAction(document.getElementById('lightboxImg').src)" class="bg-black/50 text-white px-4 py-2 rounded-full pointer-events-auto backdrop-blur border border-white/20 shadow-lg hover:bg-white/20 transition">
+                <i class="fa-solid fa-print mr-2"></i>Print
+            </button>
+            
+            <button onclick="resetZoom()" class="bg-black/50 text-white px-4 py-2 rounded-full pointer-events-auto backdrop-blur border border-white/20 shadow-lg"><i class="fa-solid fa-compress mr-2"></i>Reset</button>
+        </div>
+        
+        <button onclick="document.getElementById('lightboxModal').classList.add('hidden')" class="absolute top-4 right-4 text-white text-3xl drop-shadow-lg hover:scale-110 transition z-[260] bg-black/20 w-10 h-10 rounded-full flex items-center justify-center"><i class="fa-solid fa-times"></i></button>
+    </div>
     
     <div id="linkResultModal" class="hidden fixed inset-0 z-[260] bg-black/90 backdrop-blur flex items-center justify-center p-4"><div class="glass-panel rounded-xl p-6 w-full max-w-sm"><input type="text" id="finalLinkInput" readonly class="w-full bg-black/50 text-green-400 font-mono text-xs p-3 rounded-lg mb-4 border border-gray-700 shadow-inner"><div class="flex gap-2"><button onclick="copyLinkAction()" class="flex-1 btn-3d-primary py-2 rounded text-xs text-white">Copy Link</button><button onclick="document.getElementById('linkResultModal').classList.add('hidden')" class="btn-3d-secondary px-4 py-2 rounded text-xs text-gray-300">Close</button></div><p id="copyFeedback" class="text-center text-[10px] text-green-400 mt-2 h-3"></p></div></div>
     
     <div id="historyModal" class="hidden fixed inset-0 z-[210] bg-black/80 backdrop-blur flex items-center justify-center p-4">
         <div class="glass-panel rounded-2xl w-full max-w-lg flex flex-col max-h-[80vh] shadow-2xl">
             <div class="p-5 border-b border-white/5 flex justify-between items-center bg-gray-900/50">
-                <h3 class="text-white font-bold text-lg"><i class="fa-solid fa-clock-rotate-left mr-2 text-indigo-500"></i>Prompt History</h3>
+                <h3 class="text-white font-bold text-lg"><i class="fa-solid fa-clock-rotate-left mr-2 text-theme"></i>Prompt History</h3>
                 <button onclick="document.getElementById('historyModal').classList.add('hidden')" class="text-gray-400 hover:text-white text-xl"><i class="fa-solid fa-times"></i></button>
             </div>
             <div id="promptHistoryList" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
@@ -389,6 +457,107 @@
         let activeGalleryType = 'target', tempSelected = [], lastGalleryDoc = null, isGalleryLoading = false;
         let currentQuality = '1k', currentCost = 1, currentResultBase64 = null, hasGenerated = false;
         
+        // --- ZOOM LOGIC ---
+        let zoomState = { scale: 1, panning: false, pointX: 0, pointY: 0, startX: 0, startY: 0 };
+        const zoomContainer = document.getElementById('zoomContainer');
+        const zoomImg = document.getElementById('lightboxImg');
+
+        function setupZoom() {
+            zoomState = { scale: 1, panning: false, pointX: 0, pointY: 0, startX: 0, startY: 0 };
+            updateZoomTransform();
+        }
+
+        function updateZoomTransform() {
+            zoomImg.style.transform = `translate(${zoomState.pointX}px, ${zoomState.pointY}px) scale(${zoomState.scale})`;
+        }
+        
+        window.resetZoom = () => { setupZoom(); };
+
+        // Simple Pinch/Pan Logic for Mobile & Desktop
+        zoomContainer.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const xs = (e.clientX - zoomState.pointX) / zoomState.scale;
+            const ys = (e.clientY - zoomState.pointY) / zoomState.scale;
+            const delta = -e.deltaY;
+            (delta > 0) ? (zoomState.scale *= 1.2) : (zoomState.scale /= 1.2);
+            zoomState.pointX = e.clientX - xs * zoomState.scale;
+            zoomState.pointY = e.clientY - ys * zoomState.scale;
+            updateZoomTransform();
+        });
+
+        let evCache = [];
+        let prevDiff = -1;
+
+        zoomContainer.onpointerdown = (ev) => {
+            evCache.push(ev);
+            if (evCache.length === 1) {
+                zoomState.panning = true;
+                zoomState.startX = ev.clientX - zoomState.pointX;
+                zoomState.startY = ev.clientY - zoomState.pointY;
+            }
+        };
+
+        zoomContainer.onpointermove = (ev) => {
+            const index = evCache.findIndex((cachedEv) => cachedEv.pointerId === ev.pointerId);
+            if(index >= 0) evCache[index] = ev;
+
+            if (evCache.length === 2) {
+                // Pinch to Zoom
+                const curDiff = Math.hypot(evCache[0].clientX - evCache[1].clientX, evCache[0].clientY - evCache[1].clientY);
+                if (prevDiff > 0) {
+                    if (curDiff > prevDiff) zoomState.scale *= 1.05;
+                    if (curDiff < prevDiff) zoomState.scale /= 1.05;
+                    updateZoomTransform();
+                }
+                prevDiff = curDiff;
+            } else if (evCache.length === 1 && zoomState.panning) {
+                // Pan
+                zoomState.pointX = ev.clientX - zoomState.startX;
+                zoomState.pointY = ev.clientY - zoomState.startY;
+                updateZoomTransform();
+            }
+        };
+
+        zoomContainer.onpointerup = (ev) => {
+            const index = evCache.findIndex((cachedEv) => cachedEv.pointerId === ev.pointerId);
+            if(index >= 0) {
+                evCache.splice(index, 1);
+                if (evCache.length < 2) prevDiff = -1;
+                if (evCache.length === 0) zoomState.panning = false;
+            }
+        };
+        // --- END ZOOM LOGIC ---
+
+        // --- THEME LOGIC ---
+        window.changeTheme = (name, hue) => {
+            const root = document.documentElement;
+            root.style.setProperty('--primary-h', hue);
+            localStorage.setItem('theme_hue', hue);
+            
+            // Visual Feedback
+            document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+            const activeDot = document.querySelector(`.color-dot[onclick*="${name}"]`);
+            if(activeDot) activeDot.classList.add('active');
+        };
+
+        function initTheme() {
+            const savedHue = localStorage.getItem('theme_hue');
+            if(savedHue) {
+                document.documentElement.style.setProperty('--primary-h', savedHue);
+                // Highlight correct dot approx
+                const dots = document.querySelectorAll('.color-dot');
+                dots.forEach(d => {
+                    const clickAttr = d.getAttribute('onclick');
+                    if(clickAttr.includes(savedHue)) d.classList.add('active');
+                });
+            } else {
+                 // Default Indigo
+                 document.querySelector('.color-dot[onclick*="indigo"]').classList.add('active');
+            }
+        }
+        initTheme();
+        // --- END THEME LOGIC ---
+
         function generateUUID() {
             if (typeof crypto !== 'undefined' && crypto.randomUUID) { return crypto.randomUUID(); }
             return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -403,7 +572,7 @@
             ['input','compare','result'].forEach(v => { 
                 const btn = document.getElementById('btnView'+v.charAt(0).toUpperCase()+v.slice(1));
                 if(m===v) {
-                     btn.className = `px-3 py-1 rounded text-[10px] font-bold bg-indigo-600 text-white shadow-lg`;
+                     btn.className = `px-3 py-1 rounded text-[10px] font-bold bg-theme text-white shadow-lg`;
                 } else {
                      btn.className = `px-3 py-1 rounded text-[10px] font-bold text-gray-400 hover:bg-gray-800 transition`;
                 }
@@ -430,12 +599,12 @@
             currentQuality = val; currentCost = val==='1k'?1:(val==='2k'?2:4); 
             ['1k','2k','4k'].forEach(k => {
                 const btn = document.getElementById('btn'+k);
-                if(k===val) btn.className = `text-[10px] font-bold py-2 rounded-lg transition bg-indigo-600 text-white shadow-lg border-t border-indigo-400 border-b border-indigo-800 transform scale-105`;
+                if(k===val) btn.className = `text-[10px] font-bold py-2 rounded-lg transition bg-theme text-white shadow-lg border-t border-white/20 border-b border-black/20 transform scale-105`;
                 else btn.className = `text-[10px] font-bold py-2 rounded-lg transition btn-3d-secondary text-gray-400`;
             });
             checkReady(); 
         };
-        window.loadMoreImages = () => window.filterGallery(currentCatView);
+        window.loadMoreImages = () => window.loadNextGalleryBatch(currentCatView);
         window.clearGallerySelection = () => { tempSelected = []; document.querySelectorAll('.selection-overlay').forEach(el => el.classList.add('hidden')); document.getElementById('confirmSelectionBtn').innerText = 'Select'; };
         window.closeGallery = () => document.getElementById('galleryModal').classList.add('hidden');
         window.addNewCat = () => { const n = prompt("New Folder Name:"); if(n) { categories.add(n); updateCatDropdowns(); document.getElementById('galUploadCat').value = n; } };
@@ -466,7 +635,6 @@
             if (snap.empty) throw new Error("Invalid Code");
             const d = snap.docs[0]; const data = d.data();
             
-            // FIXED: Only block if status is explicitly NOT active (handles missing status field)
             const isUnlimited = data.expiryDate === -1 || data.expiryDate === 'unlimited';
             if (data.status && data.status !== 'active') throw new Error("Code Inactive"); 
             if (!isUnlimited && data.expiryDate < Date.now()) throw new Error("Code Expired");
@@ -577,8 +745,8 @@
             const opts = validCats.map(c => `<option value="${c}">${c}</option>`).join('');
             document.getElementById('mobileCatSelect').innerHTML = `<option value="All">All Folders</option>` + opts;
             
-            const desktopHtml = `<button onclick="filterGallery('All')" class="w-full text-left text-xs text-white p-2.5 mb-1 rounded-lg hover:bg-white/10 transition ${currentCatView === 'All' ? 'bg-indigo-900/50 border border-indigo-500/30 font-bold shadow-sm' : 'text-gray-400'}">All Folders</button>` + 
-                validCats.map(c => `<button onclick="filterGallery('${c}')" class="w-full text-left text-xs p-2.5 rounded-lg hover:bg-white/10 transition truncate ${currentCatView === c ? 'bg-indigo-900/50 text-white border border-indigo-500/30 font-bold shadow-sm' : 'text-gray-400'}">${c}</button>`).join('');
+            const desktopHtml = `<button onclick="filterGallery('All')" class="w-full text-left text-xs text-white p-2.5 mb-1 rounded-lg hover:bg-white/10 transition ${currentCatView === 'All' ? 'bg-theme/20 border border-theme text-theme font-bold shadow-sm' : 'text-gray-400'}">All Folders</button>` + 
+                validCats.map(c => `<button onclick="filterGallery('${c}')" class="w-full text-left text-xs p-2.5 rounded-lg hover:bg-white/10 transition truncate ${currentCatView === c ? 'bg-theme/20 text-theme border border-theme font-bold shadow-sm' : 'text-gray-400'}">${c}</button>`).join('');
             document.getElementById('categoryListDesktop').innerHTML = desktopHtml;
             document.getElementById('galUploadCat').innerHTML = opts || `<option value="မူရင်းပုံများ">မူရင်းပုံများ</option>`;
             document.getElementById('mobileCatSelect').value = currentCatView;
@@ -607,65 +775,97 @@
         }
 
         window.loadNextGalleryBatch = async (cat) => {
-            if(isGalleryLoading) return; isGalleryLoading = true;
+            if(isGalleryLoading) return; 
+            isGalleryLoading = true;
             const grid = document.getElementById('galleryGrid');
-            try {
-                let q;
-                if(cat === 'All') { q = query(collection(db, `user_data/${activeAccessCode}/targets`), limit(50)); } 
-                else { q = query(collection(db, `user_data/${activeAccessCode}/targets`), where('category', '==', cat), limit(50)); }
-                
-                if(lastGalleryDoc && cat === 'All') q = query(q, startAfter(lastGalleryDoc));
+            const loadMoreBtn = document.getElementById('loadMoreContainer');
+            if(loadMoreBtn) loadMoreBtn.innerHTML = '<span class="text-white text-xs animate-pulse">Loading...</span>';
 
+            try {
+                let constraints = [];
+                if(cat !== 'All') { constraints.push(where('category', '==', cat)); }
+                constraints.push(orderBy('createdAt', 'desc'));
+                if(lastGalleryDoc) { constraints.push(startAfter(lastGalleryDoc)); }
+                constraints.push(limit(50));
+
+                const q = query(collection(db, `user_data/${activeAccessCode}/targets`), ...constraints);
                 const snap = await getDocs(q);
+                
                 let docs = [];
                 snap.forEach(d => docs.push({id: d.id, ...d.data(), doc: d}));
-                docs.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
 
                 docs.forEach(data => {
                     const div = document.createElement('div');
                     div.className = "relative aspect-square rounded-lg overflow-hidden border border-gray-700 group shadow-lg hover:-translate-y-1 transition duration-300";
+                    
                     let btns = `
                         <button onclick="viewImg('${data.url}')" class="bg-black/60 backdrop-blur text-white w-7 h-7 rounded-full flex items-center justify-center hover:bg-white/20 transition" title="View Full"><i class="fa-solid fa-eye text-[10px]"></i></button>
                         <button onclick="downloadImageAction('${data.url}', '${data.name || 'image'}')" class="bg-black/60 backdrop-blur text-white w-7 h-7 rounded-full flex items-center justify-center hover:bg-blue-600 transition" title="Download"><i class="fa-solid fa-download text-[10px]"></i></button>
                         <button onclick="shareImageAction('${data.url}')" class="bg-black/60 backdrop-blur text-white w-7 h-7 rounded-full flex items-center justify-center hover:bg-yellow-600 transition" title="Share"><i class="fa-solid fa-share-nodes text-[10px]"></i></button>
                         <button onclick="copyImgLink('${data.url}')" class="bg-black/60 backdrop-blur text-white w-7 h-7 rounded-full flex items-center justify-center hover:bg-green-600 transition" title="Copy Link"><i class="fa-solid fa-link text-[10px]"></i></button>
                     `;
+                    
                     if(permissions.delete) btns += `<button onclick="deleteImg('${data.id}')" class="bg-black/60 backdrop-blur text-white w-7 h-7 rounded-full flex items-center justify-center hover:bg-red-600 transition"><i class="fa-solid fa-trash text-[10px]"></i></button>`;
                     
                     div.innerHTML = `
-                        <img src="${data.url}" class="w-full h-full object-cover cursor-pointer" onclick="selectImg('${data.id}', '${data.url}', this)">
+                        <img src="${data.url}" loading="lazy" class="w-full h-full object-cover cursor-pointer bg-gray-900" onclick="selectImg('${data.id}', '${data.url}', this)">
                         <div class="absolute top-1 right-1 flex gap-1 z-20 opacity-0 group-hover:opacity-100 transition" onclick="event.stopPropagation()">${btns}</div>
-                        <div class="selection-overlay absolute inset-0 bg-indigo-500/40 hidden flex items-center justify-center pointer-events-none backdrop-blur-[2px] border-4 border-indigo-500">
+                        <div class="selection-overlay absolute inset-0 bg-theme/40 hidden flex items-center justify-center pointer-events-none backdrop-blur-[2px] border-4 border-theme">
                             <i class="fa-solid fa-check text-white text-3xl drop-shadow-md"></i>
                         </div>
                     `;
                     grid.appendChild(div);
                 });
 
-                if(!snap.empty) lastGalleryDoc = snap.docs[snap.docs.length-1];
-                document.getElementById('loadMoreContainer').classList.toggle('hidden', snap.size < 20);
-                if(docs.length === 0) grid.innerHTML = `<p class="col-span-full text-center text-gray-500 py-10">No images found in "${cat}"</p>`;
+                if(!snap.empty) { lastGalleryDoc = snap.docs[snap.docs.length-1]; }
+                document.getElementById('loadMoreContainer').classList.toggle('hidden', snap.size < 50);
+                if(loadMoreBtn) loadMoreBtn.innerHTML = '<button onclick="loadMoreImages()" class="btn-3d-secondary px-6 py-2 rounded-full text-xs font-bold text-white">Load More</button>';
+                if(docs.length === 0 && !lastGalleryDoc) { grid.innerHTML = `<p class="col-span-full text-center text-gray-500 py-10">No images found in "${cat}"</p>`; }
             
-            } catch (err) { console.error(err); alert("Gallery Error: " + err.message); }
+            } catch (err) { 
+                console.error(err); 
+                if(loadMoreBtn) loadMoreBtn.innerHTML = '<button onclick="loadMoreImages()" class="btn-3d-secondary px-6 py-2 rounded-full text-xs font-bold text-white">Try Again</button>';
+            }
             isGalleryLoading = false;
         };
 
         window.selectImg = (id, url, imgEl) => {
             const parent = imgEl.parentElement;
             const overlay = parent.querySelector('.selection-overlay');
-            
             const idx = tempSelected.findIndex(i => i.id === id);
-            if(idx > -1) { 
-                tempSelected.splice(idx, 1); 
-                overlay.classList.add('hidden'); 
-            } else { 
-                tempSelected.push({id, url}); 
-                overlay.classList.remove('hidden'); 
-            }
+            if(idx > -1) { tempSelected.splice(idx, 1); overlay.classList.add('hidden'); } else { tempSelected.push({id, url}); overlay.classList.remove('hidden'); }
             document.getElementById('confirmSelectionBtn').innerText = `Select (${tempSelected.length})`;
         };
 
-        window.viewImg = (url) => { document.getElementById('lightboxImg').src = url; document.getElementById('lightboxModal').classList.remove('hidden'); };
+        // OPEN LIGHTBOX WITH ZOOM RESET
+        window.viewImg = (url) => { 
+            document.getElementById('lightboxImg').src = url; 
+            document.getElementById('lightboxModal').classList.remove('hidden'); 
+            setupZoom();
+        };
+
+        // --- PRINT FUNCTION ---
+        window.printImageAction = (url) => {
+            if(!url || url === 'undefined') return alert("No image to print.");
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>Print Image</title>
+                    <style>
+                        body { margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: white; }
+                        img { max-width: 100%; max-height: 100%; object-fit: contain; }
+                        @media print { body { -webkit-print-color-adjust: exact; } }
+                    </style>
+                </head>
+                <body>
+                    <img src="${url}" onload="window.print(); window.close();">
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+        };
+
         window.copyImgLink = (url) => { document.getElementById('finalLinkInput').value = url; document.getElementById('linkResultModal').classList.remove('hidden'); document.getElementById('copyFeedback').innerText=''; };
         window.copyLinkAction = async () => { const i = document.getElementById('finalLinkInput'); i.select(); try { await navigator.clipboard.writeText(i.value); document.getElementById('copyFeedback').innerText='Copied!'; } catch(e){} };
         window.deleteImg = async (id) => { if(!confirm("Delete this image?")) return; await deleteDoc(doc(db, `user_data/${activeAccessCode}/targets`, id)); filterGallery(currentCatView); };
@@ -685,34 +885,19 @@
                 document.body.removeChild(link);
                 window.URL.revokeObjectURL(blobUrl);
             } catch (e) {
-                if(confirm("Download blocked by browser. Open image to save manually?")) {
-                    window.open(url, '_blank');
-                }
+                if(confirm("Download blocked by browser. Open image to save manually?")) { window.open(url, '_blank'); }
             }
         };
 
-        window.downloadResultImage = () => {
-             if(currentResultBase64) {
-                 window.downloadImageAction(currentResultBase64, "ai_result_" + Date.now());
-             } else {
-                 alert("No result to download");
-             }
-        };
-
+        window.downloadResultImage = () => { if(currentResultBase64) { window.downloadImageAction(currentResultBase64, "ai_result_" + Date.now()); } else { alert("No result to download"); } };
         window.shareImageAction = async (url) => {
             if (!navigator.share) return alert("Sharing not supported on this device/browser.");
             try {
                 const response = await fetch(url);
                 const blob = await response.blob();
                 const file = new File([blob], "image.jpg", { type: blob.type });
-                await navigator.share({
-                    files: [file],
-                    title: 'AI Studio Image',
-                    text: 'Check out this image created with AI Studio!'
-                });
-            } catch (e) {
-                alert("Share failed: " + e.message);
-            }
+                await navigator.share({ files: [file], title: 'AI Studio Image', text: 'Check out this image created with AI Studio!' });
+            } catch (e) { alert("Share failed: " + e.message); }
         };
 
         document.getElementById('confirmSelectionBtn').addEventListener('click', () => {
@@ -725,7 +910,6 @@
         window.uploadToGalleryAction = async () => {
             const files = document.getElementById('galUploadFile').files; 
             const cat = document.getElementById('galUploadCat').value; 
-            
             if(files.length === 0) return alert("Select at least one file"); 
             if(!cat) return alert("Select a Folder");
             if(!adminConfig.imgbbKey) return alert("System Error: Admin API Key Missing");
@@ -736,7 +920,6 @@
 
             let successCount = 0;
             const total = files.length;
-
             const processFile = async (file) => {
                 return new Promise((resolve, reject) => {
                     const reader = new FileReader();
@@ -744,28 +927,15 @@
                         try {
                             let b64 = e.target.result; 
                             if(b64.length > 2000000) b64 = await compressImage(b64, 1200, 0.8);
-                            
                             const formData = new FormData(); 
                             formData.append("image", b64.replace(/^data:image\/(png|jpg|jpeg);base64,/, ""));
-                            
                             const res = await fetch(`https://api.imgbb.com/1/upload?key=${adminConfig.imgbbKey}`, { method: 'POST', body: formData });
                             const json = await res.json();
-                            
                             if(json.success) {
-                                await addDoc(collection(db, `user_data/${activeAccessCode}/targets`), { 
-                                    url: json.data.url, 
-                                    viewer_url: json.data.url_viewer, 
-                                    category: cat, 
-                                    type: 'target', 
-                                    createdAt: Date.now() 
-                                });
+                                await addDoc(collection(db, `user_data/${activeAccessCode}/targets`), { url: json.data.url, viewer_url: json.data.url_viewer, category: cat, type: 'target', createdAt: Date.now() });
                                 resolve(true);
-                            } else {
-                                resolve(false);
-                            }
-                        } catch(err) {
-                            resolve(false);
-                        }
+                            } else { resolve(false); }
+                        } catch(err) { resolve(false); }
                     };
                     reader.readAsDataURL(file);
                 });
@@ -776,70 +946,94 @@
                 const result = await processFile(files[i]);
                 if(result) successCount++;
             }
-
             document.getElementById('globalLoader').classList.add('hidden'); 
             document.getElementById('globalLoaderText').innerText = "UPLOADING TO CLOUD..."; 
-            
-            categories.add(cat); 
-            filterGallery(cat); 
-            
+            categories.add(cat); filterGallery(cat); 
             if(successCount > 0) alert(`Successfully uploaded ${successCount} images to "${cat}".`);
             else alert("Upload failed. Please check your connection or image sizes.");
         };
 
-        // --- PINTEREST IMPORT ---
         window.importFromUrl = async (type = 'target') => {
             const url = prompt("Paste Image Link (Direct Link Only):\nTip: Right-click image > Copy Image Address");
             if(!url) return;
-            
             if(!adminConfig.imgbbKey) return alert("System Error: Admin API Key Missing");
-            
-            // Auto categorize as 'Pinterest' if adding to target
             const cat = "Pinterest";
-            
             document.getElementById('globalLoader').classList.remove('hidden');
             document.getElementById('globalLoaderText').innerText = "IMPORTING FROM URL...";
-
-            const formData = new FormData();
-            formData.append("image", url); 
-
+            const formData = new FormData(); formData.append("image", url); 
             try {
                 const res = await fetch(`https://api.imgbb.com/1/upload?key=${adminConfig.imgbbKey}`, { method: 'POST', body: formData });
                 const json = await res.json();
-                
                 if(json.success) {
                     const newUrl = json.data.url;
-                    
-                    // Add to Firestore
-                    await addDoc(collection(db, `user_data/${activeAccessCode}/targets`), { 
-                        url: newUrl, 
-                        category: cat, 
-                        type: 'target', 
-                        name: "Import_" + Date.now(), 
-                        createdAt: Date.now() 
-                    });
-
-                    // Add to Input Preview Immediately
+                    await addDoc(collection(db, `user_data/${activeAccessCode}/targets`), { url: newUrl, category: cat, type: 'target', name: "Import_" + Date.now(), createdAt: Date.now() });
                     const newItem = { id: 'temp_' + Date.now(), url: newUrl };
-                    if(type === 'target') {
-                        selectedTargets.push(newItem);
-                        renderSelectedTargets();
-                    } else {
-                        // Just in case we enable it for faces later
-                        selectedFaces.push(newItem);
-                        renderSelectedFaces();
-                    }
-
+                    if(type === 'target') { selectedTargets.push(newItem); renderSelectedTargets(); } else { selectedFaces.push(newItem); renderSelectedFaces(); }
                     document.getElementById('globalLoader').classList.add('hidden');
                     categories.add(cat); 
-                    // No need to alert, just show it
-                } else {
-                    throw new Error(json.error.message);
-                }
-            } catch(e) {
+                } else { throw new Error(json.error.message); }
+            } catch(e) { document.getElementById('globalLoader').classList.add('hidden'); alert("Import Failed: " + e.message + "\nMake sure it's a direct image link."); }
+        };
+
+        window.backupUserData = async () => {
+            if(!activeAccessCode) return alert("Please login first.");
+            document.getElementById('globalLoader').classList.remove('hidden');
+            document.getElementById('globalLoaderText').innerText = "PREPARING BACKUP...";
+            try {
+                const targets = []; const prompts = [];
+                const imgQ = query(collection(db, `user_data/${activeAccessCode}/targets`));
+                const imgSnap = await getDocs(imgQ);
+                imgSnap.forEach(doc => { const d = doc.data(); targets.push({ url: d.url, category: d.category || 'Uncategorized', type: d.type || 'target', name: d.name || 'Backup_Img', createdAt: d.createdAt || Date.now() }); });
+                const pmtQ = query(collection(db, `user_data/${activeAccessCode}/prompts`));
+                const pmtSnap = await getDocs(pmtQ);
+                pmtSnap.forEach(doc => { prompts.push(doc.data()); });
+
+                const backupData = { version: "1.0", date: new Date().toISOString(), accessCode: activeAccessCode, stats: { images: targets.length, prompts: prompts.length }, data: { targets: targets, prompts: prompts } };
+                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData));
+                const downloadAnchorNode = document.createElement('a');
+                downloadAnchorNode.setAttribute("href", dataStr);
+                downloadAnchorNode.setAttribute("download", "ai_studio_backup_" + new Date().toISOString().slice(0,10) + ".json");
+                document.body.appendChild(downloadAnchorNode); downloadAnchorNode.click(); downloadAnchorNode.remove();
                 document.getElementById('globalLoader').classList.add('hidden');
-                alert("Import Failed: " + e.message + "\nMake sure it's a direct image link.");
-            }
+            } catch(e) { console.error(e); document.getElementById('globalLoader').classList.add('hidden'); alert("Backup Failed: " + e.message); }
+        };
+
+        window.restoreUserData = async (input) => {
+            const file = input.files[0]; if(!file) return;
+            if(!confirm("Restore Backup?\nThis will add missing images/prompts to your current gallery.")) { input.value = ''; return; }
+            document.getElementById('globalLoader').classList.remove('hidden');
+            document.getElementById('globalLoaderText').innerText = "READING FILE...";
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                try {
+                    const json = JSON.parse(e.target.result);
+                    if(!json.data || !json.data.targets) throw new Error("Invalid Backup File");
+                    document.getElementById('globalLoaderText').innerText = "RESTORING DATA...";
+                    const currentUrls = new Set();
+                    const existingSnap = await getDocs(collection(db, `user_data/${activeAccessCode}/targets`));
+                    existingSnap.forEach(d => currentUrls.add(d.data().url));
+                    let restoredCount = 0; const batchLimit = 400; let batch = writeBatch(db); let opCount = 0;
+                    for(const item of json.data.targets) {
+                        if(!currentUrls.has(item.url)) {
+                            const newRef = doc(collection(db, `user_data/${activeAccessCode}/targets`));
+                            batch.set(newRef, item); restoredCount++; opCount++; currentUrls.add(item.url);
+                        }
+                        if(opCount >= batchLimit) { await batch.commit(); batch = writeBatch(db); opCount = 0; }
+                    }
+                    if(json.data.prompts) {
+                        for(const pmt of json.data.prompts) {
+                            const newRef = doc(collection(db, `user_data/${activeAccessCode}/prompts`));
+                            batch.set(newRef, pmt); opCount++;
+                            if(opCount >= batchLimit) { await batch.commit(); batch = writeBatch(db); opCount = 0; }
+                        }
+                    }
+                    if(opCount > 0) await batch.commit();
+                    document.getElementById('globalLoader').classList.add('hidden');
+                    alert(`Restore Complete!\nAdded ${restoredCount} images to gallery.`); location.reload(); 
+                } catch(err) { console.error(err); document.getElementById('globalLoader').classList.add('hidden'); alert("Restore Failed: " + err.message); }
+                input.value = '';
+            };
+            reader.readAsText(file);
         };
 
         document.getElementById('generateBtn').addEventListener('click', async () => {
@@ -847,7 +1041,6 @@
             if(!adminConfig.apiKey) return alert("System not ready.");
             const loader = document.getElementById('loader'); loader.classList.remove('hidden'); 
             const parts = [{ text: document.getElementById('promptInput').value + (currentQuality!=='1k' ? ', high quality' : '') }];
-            
             const getBase64 = (url) => {
                 return new Promise((resolve, reject) => {
                     if(url.startsWith('data:')) return resolve(url.split(',')[1]);
@@ -861,13 +1054,11 @@
                 const tB64s = await Promise.all(selectedTargets.map(t => getBase64(t.url)));
                 const fB64s = (permissions.face_input !== false) ? await Promise.all(selectedFaces.map(f => getBase64(f.url))) : [];
                 [...tB64s, ...fB64s].forEach(d => parts.push({ inlineData: { mimeType: "image/jpeg", data: d } }));
-                
                 let modelId = adminConfig.model ? adminConfig.model.replace('models/', '') : 'gemini-1.5-flash';
                 const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelId}:generateContent?key=${adminConfig.apiKey}`, { 
                     method: 'POST', headers: {'Content-Type': 'application/json'}, 
                     body: JSON.stringify({ contents: [{ parts: parts }], safetySettings: [{ category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" }, { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" }, { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" }, { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" }]}) 
                 });
-                
                 const json = await res.json();
                 if(json.error) throw new Error(json.error.message);
                 const img = json.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
@@ -883,38 +1074,24 @@
                     document.getElementById('resultImage').src = currentResultBase64;
                     hasGenerated = true; 
                     window.switchView('result');
-
                     if(adminConfig.imgbbKey) {
-                        const formData = new FormData(); 
-                        formData.append("image", img);
-                        fetch(`https://api.imgbb.com/1/upload?key=${adminConfig.imgbbKey}`, { method: 'POST', body: formData })
-                        .then(r => r.json())
-                        .then(async (json) => {
+                        const formData = new FormData(); formData.append("image", img);
+                        fetch(`https://api.imgbb.com/1/upload?key=${adminConfig.imgbbKey}`, { method: 'POST', body: formData }).then(r => r.json()).then(async (json) => {
                             if(json.success) {
-                                await addDoc(collection(db, `user_data/${activeAccessCode}/targets`), { 
-                                    url: json.data.url, 
-                                    category: "ပြင်ပြီးပုံများ", 
-                                    type: "result", 
-                                    name: "Auto_Gen_" + Date.now(), 
-                                    createdAt: Date.now() 
-                                });
+                                await addDoc(collection(db, `user_data/${activeAccessCode}/targets`), { url: json.data.url, category: "ပြင်ပြီးပုံများ", type: "result", name: "Auto_Gen_" + Date.now(), createdAt: Date.now() });
                                 const toast = document.getElementById('autoSaveToast');
-                                toast.classList.remove('translate-y-10', 'opacity-0');
-                                setTimeout(() => toast.classList.add('translate-y-10', 'opacity-0'), 3000);
+                                toast.classList.remove('translate-y-10', 'opacity-0'); setTimeout(() => toast.classList.add('translate-y-10', 'opacity-0'), 3000);
                             }
                         }).catch(err => console.error("Auto-save failed", err));
                     }
-
                 } else throw new Error("Blocked by AI Safety or No Image Generated.");
             } catch(e) { alert("Generate Error: " + e.message); } finally { loader.classList.add('hidden'); }
         });
 
         document.getElementById('saveCloudBtn').addEventListener('click', async () => {
             if(!currentResultBase64) return alert("No result");
-            const userFileName = prompt("Enter a name for this image:", "My_AI_Image");
-            if(userFileName === null) return;
+            const userFileName = prompt("Enter a name for this image:", "My_AI_Image"); if(userFileName === null) return;
             const finalName = userFileName.trim() || "Untitled_AI";
-
             if(!adminConfig.imgbbKey) return alert("System Error: Admin API Key Missing");
             document.getElementById('globalLoader').classList.remove('hidden'); 
             const formData = new FormData(); formData.append("image", currentResultBase64.replace(/^data:image\/(png|jpg|jpeg);base64,/, ""));
@@ -938,24 +1115,18 @@
             snap.forEach(d => {
                 list.innerHTML += `<div class="bg-black/30 p-4 rounded-lg text-sm text-gray-200 hover:bg-white/5 cursor-pointer flex justify-between gap-4 items-center mb-2 border border-white/5 shadow-sm prompt-item" data-text="${d.data().text}"><span class="truncate flex-1 font-mono">${d.data().text}</span><button class="del-pmt text-red-400 hover:text-red-300 p-2 rounded-lg hover:bg-red-900/30 transition" data-id="${d.id}"><i class="fa-solid fa-trash"></i></button></div>`;
             });
-            list.onclick = (e) => {
-                const delBtn = e.target.closest('.del-pmt');
-                const item = e.target.closest('.prompt-item');
-                if(delBtn) { e.stopPropagation(); deletePrompt(delBtn.dataset.id); } else if(item) { document.getElementById('promptInput').value = item.dataset.text; document.getElementById('historyModal').classList.add('hidden'); }
-            };
+            list.onclick = (e) => { const delBtn = e.target.closest('.del-pmt'); const item = e.target.closest('.prompt-item'); if(delBtn) { e.stopPropagation(); deletePrompt(delBtn.dataset.id); } else if(item) { document.getElementById('promptInput').value = item.dataset.text; document.getElementById('historyModal').classList.add('hidden'); } };
         });
         window.deletePrompt = async (id) => { if (confirm("Delete?")) { await deleteDoc(doc(db, `user_data/${activeAccessCode}/prompts`, id)); document.getElementById('btnHistoryPrompt').click(); } }
         window.renameCat = async (oldName) => {
             const newName = prompt("Rename to:"); if(!newName) return;
             const batch = writeBatch(db); const snaps = await getDocs(query(collection(db, `user_data/${activeAccessCode}/targets`), where('category', '==', oldName)));
-            snaps.forEach(d => batch.update(d.ref, { category: newName }));
-            await batch.commit(); categories.delete(oldName); categories.add(newName); updateCatDropdowns(); window.openManageCats();
+            snaps.forEach(d => batch.update(d.ref, { category: newName })); await batch.commit(); categories.delete(oldName); categories.add(newName); updateCatDropdowns(); window.openManageCats();
         };
         window.deleteCat = async (catName) => {
             if(!confirm(`Delete folder "${catName}"? Images will move to 'မူရင်းပုံများ'.`)) return;
             const batch = writeBatch(db); const snaps = await getDocs(query(collection(db, `user_data/${activeAccessCode}/targets`), where('category', '==', catName)));
-            snaps.forEach(d => batch.update(d.ref, { category: 'မူရင်းပုံများ' }));
-            await batch.commit(); categories.delete(catName); updateCatDropdowns(); window.openManageCats();
+            snaps.forEach(d => batch.update(d.ref, { category: 'မူရင်းပုံများ' })); await batch.commit(); categories.delete(catName); updateCatDropdowns(); window.openManageCats();
         };
 
         function renderSelectedTargets() { 
@@ -983,13 +1154,8 @@
         function checkReady() { 
             const ready = adminConfig.apiKey && selectedTargets.length > 0;
             const btn = document.getElementById('generateBtn'); btn.disabled = !ready;
-            if(ready) { 
-                btn.className = "w-full btn-3d-primary py-4 rounded-xl font-bold text-xs tracking-[2px] uppercase animate-pulse"; 
-                btn.innerText = `GENERATE ( -${currentCost} Credit )`; 
-            } else { 
-                btn.className = "w-full btn-3d-secondary opacity-50 cursor-not-allowed py-4 rounded-xl font-bold text-xs tracking-[2px] uppercase"; 
-                btn.innerText = "WAITING FOR IMAGES..."; 
-            }
+            if(ready) { btn.className = "w-full btn-3d-primary py-4 rounded-xl font-bold text-xs tracking-[2px] uppercase animate-pulse"; btn.innerText = `GENERATE ( -${currentCost} Credit )`; } 
+            else { btn.className = "w-full btn-3d-secondary opacity-50 cursor-not-allowed py-4 rounded-xl font-bold text-xs tracking-[2px] uppercase"; btn.innerText = "WAITING FOR IMAGES..."; }
         }
 
         initApp();
